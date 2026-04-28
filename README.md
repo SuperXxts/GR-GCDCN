@@ -2,8 +2,6 @@
 
 This repository contains the source code for GR-GCDCN, a structure tensor guided three-dimensional deformable convolutional network for seismic fault segmentation.
 
-The repository intentionally contains code only. It does not include seismic data, trained weights, prediction volumes, logs, figures, or experiment result files.
-
 ## Repository Structure
 
 ```text
@@ -44,6 +42,22 @@ python scripts/smoke_test.py
 ```
 
 The script instantiates GR-GCDCN, runs one forward pass on a dummy 3D tensor, and reports the output tensor shape and parameter count.
+
+## Datasets
+
+The experiments can be reproduced using public seismic fault segmentation datasets.
+
+Thebe seismic data:
+
+```text
+https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YBYGBK
+```
+
+FaultSeg3D:
+
+```text
+https://drive.google.com/drive/folders/1FcykAxpqiy2NpLP1icdatrrSQgLRXLP8
+```
 
 ## Data Layout
 
