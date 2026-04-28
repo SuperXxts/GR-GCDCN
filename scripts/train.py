@@ -31,6 +31,8 @@ def parse_args():
     parser.add_argument("--seed", default=11, type=int)
     parser.add_argument("--num-classes", default=2, type=int)
     parser.add_argument("--geometric-loss-weight", default=0.1, type=float)
+    parser.add_argument("--volume-shape", default=(128, 128, 128), type=int, nargs=3)
+    parser.add_argument("--no-transpose", action="store_true")
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     return parser.parse_args()
 
@@ -93,8 +95,18 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     device = torch.device(args.device)
-    train_set = NumpyVolumeDataset(args.train_images, args.train_labels)
-    val_set = NumpyVolumeDataset(args.val_images, args.val_labels)
+    train_set = NumpyVolumeDataset(
+        args.train_images,
+        args.train_labels,
+        volume_shape=args.volume_shape,
+        transpose=not args.no_transpose,
+    )
+    val_set = NumpyVolumeDataset(
+        args.val_images,
+        args.val_labels,
+        volume_shape=args.volume_shape,
+        transpose=not args.no_transpose,
+    )
     train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=args.workers)
     val_loader = DataLoader(val_set, batch_size=1, shuffle=False, num_workers=args.workers)
 

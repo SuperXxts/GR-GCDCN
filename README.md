@@ -12,6 +12,8 @@ models/
     GCDCNv3.py              Structure tensor guidance and geometric constraint modules.
 dataloader/
   volume_dataset.py         Minimal NumPy volume dataset.
+data/
+  faultseg3d_sample/        Small processed FaultSeg3D sample for direct testing.
 scripts/
   train.py                  Minimal training and validation entry point.
   smoke_test.py             Data-free import and forward-pass check.
@@ -45,7 +47,7 @@ The script instantiates GR-GCDCN, runs one forward pass on a dummy 3D tensor, an
 
 ## Datasets
 
-The experiments can be reproduced using public seismic fault segmentation datasets.
+The repository includes a small processed FaultSeg3D sample so that the training script can be executed directly after cloning. Full-scale experiments can be reproduced using public seismic fault segmentation datasets.
 
 Thebe seismic data:
 
@@ -59,9 +61,23 @@ FaultSeg3D:
 https://drive.google.com/drive/folders/1FcykAxpqiy2NpLP1icdatrrSQgLRXLP8
 ```
 
+## Included Sample Data
+
+The included sample data are stored under:
+
+```text
+data/faultseg3d_sample/
+  train/images/sample_000.npz
+  train/labels/sample_000.npz
+  val/images/sample_100.npz
+  val/labels/sample_100.npz
+```
+
+These files are processed from the FaultSeg3D benchmark and are intended for code verification, debugging, and demonstration. They are not a substitute for the full dataset used in the paper.
+
 ## Data Layout
 
-The training script expects paired NumPy volumes. Each image volume and label volume should use the same file name under separate directories.
+The training script expects paired volumes. Each image volume and label volume should use the same file name under separate directories.
 
 ```text
 dataset/
@@ -71,22 +87,27 @@ dataset/
   val/labels/sample_100.npy
 ```
 
-Supported file formats are `.npy` and `.npz`. Label values are expected to be integer class indices.
+Supported file formats are `.dat`, `.npy`, and `.npz`. Label values are expected to be integer class indices.
 
-## Minimal Training Example
+## Direct Training Check
 
 ```bash
 python scripts/train.py \
-  --train-images /path/to/train/images \
-  --train-labels /path/to/train/labels \
-  --val-images /path/to/val/images \
-  --val-labels /path/to/val/labels \
-  --epochs 50 \
+  --train-images data/faultseg3d_sample/train/images \
+  --train-labels data/faultseg3d_sample/train/labels \
+  --val-images data/faultseg3d_sample/val/images \
+  --val-labels data/faultseg3d_sample/val/labels \
+  --epochs 1 \
   --batch-size 1 \
-  --output-dir outputs/example
+  --workers 0 \
+  --output-dir outputs/sample_run
 ```
 
-The `outputs/` directory is ignored by Git. Do not commit generated checkpoints, logs, metrics, prediction volumes, or figures.
+The command runs one training epoch and one validation pass on the included processed sample. The `outputs/` directory is ignored by Git.
+
+## Full Dataset Training
+
+After downloading and preprocessing the full dataset into the same paired directory layout, replace the four data paths in the command above with the full training and validation directories. For raw `.dat` volumes, the default volume shape is `128 128 128`.
 
 ## License
 

@@ -6,7 +6,6 @@ __pycache__/
 venv/
 env/
 
-data/
 dataset/
 datasets/
 EXP/
@@ -40,6 +39,11 @@ weights/
 *.tiff
 *.gif
 *.bmp
+
+data/*
+!data/faultseg3d_sample/
+!data/faultseg3d_sample/**
+!data/faultseg3d_sample/**/*.npz
 
 .DS_Store
 Thumbs.db
